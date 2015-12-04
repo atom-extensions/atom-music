@@ -1,0 +1,19 @@
+{
+  "name": "atom-music",
+  "main": "./lib/atom-music",
+  "version": "0.0.0",
+  "description": "A very simple Music player for atom, listen to your favorite music while workin in atom.",
+  "keywords": ["music","audio"],
+  "activationCommands": {
+    "atom-workspace": "atom-music:toggle"
+  },
+  "repository": "https://github.com/sdinesh86/atom-music",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "atom-space-pen-views": "^2.1.0",
+    "jquery": "^2.1.4"
+  }
+}
