@@ -16,6 +16,9 @@ class AtomMusicView extends View
           @button class:'btn icon icon-jump-right', click:'forward15'
         @div class:'btn-group btn-group-sm pull-right', =>
           @tag 'label', =>
+            @tag 'input', style:'display: none;', type:'button', click:'clearPlayList'
+            @span 'Clear Playlist', class:'btn icon icon-trashcan',
+          @tag 'label', =>
             @tag 'input', style:'display: none;', type:'file', multiple:true, accept:"audio/mp3", outlet:"musicFileSelectionInput"
             @span 'Open Music Files', class:'btn icon icon-file-directory',
         @div class:'inline-block playing-now-container', =>
@@ -118,6 +121,15 @@ class AtomMusicView extends View
       player.load()
       player.play()
 
+  stopTrack: ( trackNum ) ->
+    track = @playList[trackNum]
+    player = @audio_player[0]
+    if track?
+      @togglePlayback()
+      @currentTrack = null
+      @nowPlayingTitle.html ('Nothing to play')
+      player.src = null
+
   filesBrowsed: ( e ) =>
     files = $(e.target)[0].files
     if files? and files.length > 0
@@ -136,6 +148,10 @@ class AtomMusicView extends View
       else
         player.pause()
         $('.playback-button').removeClass('icon-playback-pause').addClass('icon-playback-play')
+
+  clearPlayList: ->
+    @stopTrack 0
+    @playList = []
 
   hide: ->
     @panel?.hide()
