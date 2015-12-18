@@ -9,9 +9,11 @@ class AtomMusicView extends View
     @div class:'atom-music', =>
       @div class:'audio-controls-container', outlet:'container', =>
         @div class:'btn-group btn-group-sm', =>
+          @button class:'btn icon icon-jump-left', click:'back15'
           @button class:'btn icon icon-playback-rewind', click:'prevTrack'
           @button class:'btn icon playback-button icon-playback-play', click:'togglePlayback'
           @button class:'btn icon icon-playback-fast-forward', click:'nextTrack'
+          @button class:'btn icon icon-jump-right', click:'forward15'
         @div class:'btn-group btn-group-sm pull-right', =>
           @tag 'label', =>
             @tag 'input', style:'display: none;', type:'file', multiple:true, accept:"audio/mp3", outlet:"musicFileSelectionInput"
@@ -68,6 +70,21 @@ class AtomMusicView extends View
   songEnded: ( e ) =>
     console.log "Changing track"
     @nextTrack()
+
+  skip: ( seconds )->
+    delta = @audio_player[0].currentTime + seconds
+    if (delta < 0)
+      @audio_player[0].currentTime = 0
+    else if (delta > @audio_player[0].duration)
+      @nextTrack()
+    else
+      @audio_player[0].currentTime += seconds
+
+  forward15: ->
+    @skip(15)
+
+  back15: ->
+    @skip(-15)
 
   nextTrack: ->
     player = @audio_player[0]
