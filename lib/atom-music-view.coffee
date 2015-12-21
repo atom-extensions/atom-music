@@ -1,5 +1,5 @@
 {$, View} = require 'atom-space-pen-views'
-
+playListView = require './atom-music-playlist-view'
 module.exports =
 class AtomMusicView extends View
   isPlaying: false
@@ -15,6 +15,9 @@ class AtomMusicView extends View
           @button class:'btn icon icon-playback-fast-forward', click:'nextTrack'
           @button class:'btn icon icon-jump-right', click:'forward15'
         @div class:'btn-group btn-group-sm pull-right', =>
+          @tag 'label', =>
+            @tag 'input', style:'display: none;', type:'button', click:'showPlayList'
+            @span 'Show Playlist', class:'btn icon icon-list-ordered',
           @tag 'label', =>
             @tag 'input', style:'display: none;', type:'button', click:'clearPlayList'
             @span 'Clear Playlist', class:'btn icon icon-trashcan',
@@ -125,7 +128,7 @@ class AtomMusicView extends View
     track = @playList[trackNum]
     player = @audio_player[0]
     if track?
-      @togglePlayback()
+      @togglePlayback() if not player.paused
       @currentTrack = null
       @nowPlayingTitle.html ('Nothing to play')
       player.src = null
@@ -148,6 +151,9 @@ class AtomMusicView extends View
       else
         player.pause()
         $('.playback-button').removeClass('icon-playback-pause').addClass('icon-playback-play')
+
+  showPlayList: ->
+    new playListView @, @playList
 
   clearPlayList: ->
     @stopTrack 0
