@@ -22,7 +22,7 @@ class AtomMusicView extends View
             @tag 'input', style:'display: none;', type:'button', click:'clearPlayList'
             @span 'Clear Playlist', class:'btn icon icon-trashcan',
           @tag 'label', =>
-            @tag 'input', style:'display: none;', type:'file', multiple:true, accept:"audio/mp3", outlet:"musicFileSelectionInput"
+            @tag 'input', style:'display: none;', type:'file', multiple:true, accept:"audio/*", outlet:"musicFileSelectionInput"
             @span 'Open Music Files', class:'btn icon icon-file-directory',
         @div class:'inline-block playing-now-container', =>
           @span 'Now Playing : ', class:'highlight'
