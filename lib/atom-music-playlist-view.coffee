@@ -14,7 +14,7 @@ class PlayListView extends SelectListView
       "<li><!--<img src=''width='20' height='20' >-->&nbsp; &nbsp; #{track.name}</li>"
 
   confirmed: (track)->
-      @player.playTrack(@items.indexOf(track))
+      @player.playTrackByItem(track)
       @parent().remove()
 
   cancelled: ->

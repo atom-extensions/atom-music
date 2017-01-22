@@ -4,7 +4,9 @@ module.exports =
 class AtomMusicView extends View
   isPlaying: false
   playList: []
+  playListCopy: []
   currentTrack: null
+  shuffle: false
   @content: ->
     @div class:'atom-music', =>
       @div class:'audio-controls-container', outlet:'container', =>
@@ -15,6 +17,9 @@ class AtomMusicView extends View
           @button class:'btn icon icon-playback-fast-forward', click:'nextTrack'
           @button class:'btn icon icon-jump-right', click:'forward15'
         @div class:'btn-group btn-group-sm pull-right', =>
+          @tag 'label', =>
+            @tag 'input', style:'display: none;', type:'button', click:'toggleShuffle'
+            @span 'Order', class:'btn shuffle-button icon icon-sync'
           @tag 'label', =>
             @tag 'input', style:'display: none;', type:'button', click:'showPlayList'
             @span 'Show Playlist', class:'btn icon icon-list-ordered',
@@ -97,6 +102,7 @@ class AtomMusicView extends View
     if @currentTrack?
       currentTrackIndex = @playList.indexOf @currentTrack
       if currentTrackIndex == (@playList.length - 1)
+        @shuffleList() if @shuffle
         currentTrackIndex = 0
       else
         currentTrackIndex += 1
@@ -112,6 +118,10 @@ class AtomMusicView extends View
       else
         currentTrackIndex -= 1
       @playTrack currentTrackIndex
+
+  playTrackByItem: (item) ->
+    @shuffleList() if @shuffle
+    @playTrack @playList.indexOf(item)
 
   playTrack: ( trackNum ) ->
     track = @playList[trackNum]
@@ -139,6 +149,7 @@ class AtomMusicView extends View
       @playList = []
       for f in files
         @playList.push { name:f.name, path:f.path }
+      @playListCopy = @playList[...]
 
       @playTrack 0
 
@@ -152,12 +163,27 @@ class AtomMusicView extends View
         player.pause()
         $('.playback-button').removeClass('icon-playback-pause').addClass('icon-playback-play')
 
+  shuffleList: ->
+    for i in [@playList.length..1]
+      j = Math.floor Math.random() * i
+      [@playList[i - 1], @playList[j]] = [@playList[j], @playList[i - 1]]
+
+  toggleShuffle: ->
+    @shuffle = !@shuffle
+    if @shuffle
+      $('.shuffle-button').text('Shuffle')
+      @shuffleList()
+    else
+      $('.shuffle-button').text('Order')
+      @playList = @playListCopy[...]
+
   showPlayList: ->
-    new playListView @, @playList
+    new playListView @, @playListCopy
 
   clearPlayList: ->
     @stopTrack 0
     @playList = []
+    @playListCopy = []
 
   hide: ->
     @panel?.hide()
