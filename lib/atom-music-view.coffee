@@ -2,11 +2,22 @@
 playListView = require './atom-music-playlist-view'
 module.exports =
 class AtomMusicView extends View
-  isPlaying: false
-  playList: []
-  playListCopy: []
-  currentTrack: null
-  shuffle: false
+  constructor: (serializedState) ->
+    super()
+    if serializedState?
+      @isPlaying = serializedState.isPlaying
+      @playList = serializedState.playList
+      @playListCopy = serializedState.playListCopy
+      @currentTrack = serializedState.currentTrack
+      @shuffle = serializedState.shuffle
+      @playTrackByItem @currentTrack
+    else
+      @isPlaying = false
+      @playList = []
+      @playListCopy = []
+      @currentTrack = null
+      @shuffle = false
+
   @content: ->
     @div class:'atom-music', =>
       @div class:'audio-controls-container', outlet:'container', =>
@@ -146,9 +157,12 @@ class AtomMusicView extends View
   filesBrowsed: ( e ) =>
     files = $(e.target)[0].files
     if files? and files.length > 0
-      @playList = []
+      @playListHash = {}
+      for f in @playList
+        @playListHash[f.name] = 1
       for f in files
-        @playList.push { name:f.name, path:f.path }
+        if !@playListHash[f.name]?
+          @playList.unshift { name:f.name, path:f.path }
       @playListCopy = @playList[...]
 
       @playTrack 0
@@ -187,3 +201,10 @@ class AtomMusicView extends View
 
   hide: ->
     @panel?.hide()
+
+  serialize: ->
+    isPlaying: @isPlaying
+    playList: @playList
+    playListCopy: @playListCopy
+    currentTrack: @currentTrack
+    shuffle: @shuffle
