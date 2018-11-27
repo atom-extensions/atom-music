@@ -1,4 +1,4 @@
-{$, View} = require 'atom-space-pen-views'
+{View} = require 'atom-space-pen-views'
 playListView = require './atom-music-playlist-view'
 module.exports =
 class AtomMusicView extends View
@@ -19,18 +19,18 @@ class AtomMusicView extends View
       @shuffle = false
 
   @content: ->
-    @div class:'atom-music pulse', =>
+    @div class:'atom-music', =>
       @div class:'audio-controls-container', outlet:'container', =>
         @div class:'btn-group btn-group-sm', =>
           @button class:'btn icon icon-jump-left', click:'back15'
           @button class:'btn icon icon-playback-rewind', click:'prevTrack'
-          @button class:'btn icon playback-button icon-playback-play', click:'togglePlayback'
+          @button class:'btn icon playback-button icon-playback-play', click:'togglePlayback', outlet:'playbackButton'
           @button class:'btn icon icon-playback-fast-forward', click:'nextTrack'
           @button class:'btn icon icon-jump-right', click:'forward15'
         @div class:'btn-group btn-group-sm pull-right', =>
           @tag 'label', =>
             @tag 'input', style:'display: none;', type:'button', click:'toggleShuffle'
-            @span 'Order', class:'btn shuffle-button icon icon-sync'
+            @span 'Order', class:'btn shuffle-button icon icon-sync', outlet:'shuffleButton'
           @tag 'label', =>
             @tag 'input', style:'display: none;', type:'button', click:'showPlayList'
             @span 'Show Playlist', class:'btn icon icon-list-ordered',
@@ -38,7 +38,7 @@ class AtomMusicView extends View
             @tag 'input', style:'display: none;', type:'button', click:'clearPlayList'
             @span 'Clear Playlist', class:'btn icon icon-trashcan',
           @tag 'label', =>
-            @tag 'input', style:'display: none;', type:'file', multiple:true, accept:"audio/*", outlet:"musicFileSelectionInput"
+            @tag 'input', style:'display: none;', type:'file', multiple:true, accept:'audio/*', outlet:'musicFileSelectionInput'
             @span 'Open Music Files', class:'btn icon icon-file-directory',
         @div class:'inline-block playing-now-container', =>
           @span 'Now Playing : ', class:'highlight'
@@ -49,10 +49,14 @@ class AtomMusicView extends View
 
   initialize: ->
     @musicFileSelectionInput.on 'change', @filesBrowsed
-    @audio_player.on 'play', ( ) ->
-      $('.playback-button').removeClass('icon-playback-play').addClass('icon-playback-pause')
-    @audio_player.on 'pause', ( ) ->
-      $('.playback-button').removeClass('icon-playback-pause').addClass('icon-playback-play')
+    @audio_player.on 'play', ( ) =>
+      @playbackButton.removeClass('icon-playback-play').addClass('icon-playback-pause')
+      @element.classList.add('pulse')
+      @startTicker()
+    @audio_player.on 'pause', ( ) =>
+      @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
+      @element.classList.remove('pulse')
+      @stopTicker()
     @audio_player.on 'ended', @songEnded
     @container.on 'click', ( evt ) =>
       if 35 <= evt.offsetY <= 40 and @currentTrack?
@@ -61,21 +65,31 @@ class AtomMusicView extends View
         factor = totalTime / @container.width()
         @audio_player[0].currentTime = evt.offsetX * factor
 
+  destroy: ->
+    @element.remove()
+
   show: ->
-    @panel ?= atom.workspace.addBottomPanel(item:this)
+    @panel ?= atom.workspace.addBottomPanel item: @
     @panel.show()
 
 
   toggle:->
     if @panel?.isVisible()
       @hide()
-      clearInterval(@tickerInterval)
+      @stopTicker()
     else
       @show()
+      @startTicker()
+
+  stopTicker: ->
+    clearInterval(@tickerInterval)
+
+  startTicker: ->
+    @stopTicker()
+    if @currentTrack? and @panel?.isVisible()
       @tickerInterval = setInterval () =>
         @moveTicker()
       , 100
-
 
   moveTicker: ->
     if @currentTrack?
@@ -149,7 +163,7 @@ class AtomMusicView extends View
       player.src = null
 
   filesBrowsed: ( e ) =>
-    files = $(e.target)[0].files
+    files = e.target.files
     if files? and files.length > 0
       @playListHash = {}
       for f in @playList
@@ -166,10 +180,10 @@ class AtomMusicView extends View
     if @currentTrack?
       if player.paused or player.currentTime == 0
         player.play()
-        $('.playback-button').removeClass('icon-playback-play').addClass('icon-playback-pause')
+        @playbackButton.removeClass('icon-playback-play').addClass('icon-playback-pause')
       else
         player.pause()
-        $('.playback-button').removeClass('icon-playback-pause').addClass('icon-playback-play')
+        @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
 
   shuffleList: ->
     for i in [@playList.length..1]
@@ -179,10 +193,10 @@ class AtomMusicView extends View
   toggleShuffle: ->
     @shuffle = !@shuffle
     if @shuffle
-      $('.shuffle-button').text('Shuffle')
+      @shuffleButton.text('Shuffle')
       @shuffleList()
     else
-      $('.shuffle-button').text('Order')
+      @shuffleButton.text('Order')
       @playList = @playListCopy[...]
 
   showPlayList: ->
