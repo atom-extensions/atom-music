@@ -7,10 +7,9 @@
 .atom-music {
   height: auto;
   border: 1px solid #000;
-  transition: border 2s linear;
 
   &.pulse {
-    border-color: #02E9FF;
+    animation: pulse 2s linear infinite alternate;
   }
 
   .audio-controls-container {
@@ -45,4 +44,14 @@
   position: absolute;
   top: 98%;
   left: 0px;
+}
+
+@keyframes pulse {
+  from {
+    border-color: #000;
+  }
+
+  to {
+    border-color: #02E9FF;
+  }
 }

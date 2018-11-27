@@ -19,7 +19,7 @@ class AtomMusicView extends View
       @shuffle = false
 
   @content: ->
-    @div class:'atom-music', =>
+    @div class:'atom-music pulse', =>
       @div class:'audio-controls-container', outlet:'container', =>
         @div class:'btn-group btn-group-sm', =>
           @button class:'btn icon icon-jump-left', click:'back15'
@@ -45,14 +45,13 @@ class AtomMusicView extends View
           @span 'Nothing to play', class:'highlight', outlet:'nowPlayingTitle'
           @div id:'ticker',outlet:'ticker'
       @div class:'atom-music-list-container'
-      @tag 'audio', class:'audio-player', outlet:'audio_player', =>
+      @tag 'audio', class:'audio-player', outlet:'audio_player', ->
 
   initialize: ->
-    self = @
     @musicFileSelectionInput.on 'change', @filesBrowsed
-    @audio_player.on 'play', ( ) =>
+    @audio_player.on 'play', ( ) ->
       $('.playback-button').removeClass('icon-playback-play').addClass('icon-playback-pause')
-    @audio_player.on 'pause', ( ) =>
+    @audio_player.on 'pause', ( ) ->
       $('.playback-button').removeClass('icon-playback-pause').addClass('icon-playback-play')
     @audio_player.on 'ended', @songEnded
     @container.on 'click', ( evt ) =>
@@ -66,12 +65,17 @@ class AtomMusicView extends View
     @panel ?= atom.workspace.addBottomPanel(item:this)
     @panel.show()
 
+
   toggle:->
     if @panel?.isVisible()
       @hide()
+      clearInterval(@tickerInterval)
     else
       @show()
-      @pulsing()
+      @tickerInterval = setInterval () =>
+        @moveTicker()
+      , 100
+
 
   moveTicker: ->
     if @currentTrack?
@@ -80,17 +84,7 @@ class AtomMusicView extends View
       percentCompleted = timeSpent / totalTime
       @ticker.context.style.width = percentCompleted * @container.width() + 'px'
 
-  pulsing: ->
-    setInterval ( ) =>
-      $(@).addClass('pulse')
-      @moveTicker()
-      setTimeout ( ) =>
-        $(@).removeClass('pulse')
-      , 2000
-    , 4000
-
   songEnded: ( e ) =>
-    console.log "Changing track"
     @nextTrack()
 
   skip: ( seconds )->
