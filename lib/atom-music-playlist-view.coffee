@@ -1,24 +1,25 @@
-{View,SelectListView} = require 'atom-space-pen-views'
-$ = require 'jquery'
+{View, SelectListView} = require 'atom-space-pen-views'
 
 class PlayListView extends SelectListView
   initialize: (@player, @items) ->
-    super
-    @addClass 'overlay from-top'
+    super()
     @setItems @items
-    @panel ?= atom.workspace.addModalPanel item:@
+    @panel ?= atom.workspace.addModalPanel item: @, autoFocus: true
     @panel.show()
     @focusFilterEditor()
 
-  viewForItem: (track)->
-      "<li><!--<img src=''width='20' height='20' >-->&nbsp; &nbsp; #{track.name}</li>"
+  destroy: ->
+    @panel?.destroy()
 
-  confirmed: (track)->
-      @player.playTrackByItem(track)
-      @parent().remove()
+  viewForItem: (track) ->
+    "<li>#{track.name}</li>"
+
+  confirmed: (track) ->
+    @player.playTrack(track)
+    @panel.destroy()
 
   cancelled: ->
-    @parent().remove()
+    @panel.destroy()
 
   getFilterKey: ->
     "name"

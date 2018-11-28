@@ -8,7 +8,16 @@
     "audio"
   ],
   "activationCommands": {
-    "atom-workspace": "atom-music:toggle"
+    "atom-workspace": [
+      "atom-music:toggle",
+      "atom-music:play-pause",
+      "atom-music:toggle-shuffle",
+      "atom-music:show-playlist",
+      "atom-music:forward-15s",
+      "atom-music:backward-15s",
+      "atom-music:next-track",
+      "atom-music:previous-track"
+    ]
   },
   "repository": "https://github.com/sdinesh86/atom-music",
   "license": "MIT",
@@ -16,7 +25,6 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-    "atom-space-pen-views": "^2.1.0",
-    "jquery": "^2.1.4"
+    "atom-space-pen-views": "^2.2.0"
   }
 }

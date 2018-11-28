@@ -31,7 +31,7 @@ describe "AtomMusic", ->
         atomMusicElement = workspaceElement.querySelector('.atom-music')
         expect(atomMusicElement).toExist()
 
-        atomMusicPanel = atom.workspace.panelForItem(atomMusicElement)
+        atomMusicPanel = atom.workspace.panelForItem(AtomMusic.atomMusicView)
         expect(atomMusicPanel.isVisible()).toBe true
         atom.commands.dispatch workspaceElement, 'atom-music:toggle'
         expect(atomMusicPanel.isVisible()).toBe false
