@@ -4,19 +4,22 @@ class PlayListView extends SelectListView
   initialize: (@player, @items) ->
     super()
     @setItems @items
-    @panel ?= atom.workspace.addModalPanel item:@
+    @panel ?= atom.workspace.addModalPanel item: @, autoFocus: true
     @panel.show()
     @focusFilterEditor()
 
-  viewForItem: (track)->
-    "<li>&nbsp; &nbsp; #{track.name}</li>"
+  destroy: ->
+    @panel?.destroy()
 
-  confirmed: (track)->
-    @player.playTrackByItem(track)
-    @parent().remove()
+  viewForItem: (track) ->
+    "<li>#{track.name}</li>"
+
+  confirmed: (track) ->
+    @player.playTrack(track)
+    @panel.destroy()
 
   cancelled: ->
-    @parent().remove()
+    @panel.destroy()
 
   getFilterKey: ->
     "name"

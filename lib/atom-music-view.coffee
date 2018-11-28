@@ -2,6 +2,12 @@
 playListView = require './atom-music-playlist-view'
 module.exports =
 class AtomMusicView extends View
+  isPlaying = false
+  playList = []
+  playListCopy = []
+  currentTrack = null
+  shuffle = false
+
   constructor: (serializedState) ->
     super()
     if serializedState?
@@ -10,13 +16,14 @@ class AtomMusicView extends View
       @playListCopy = serializedState.playListCopy
       @currentTrack = serializedState.currentTrack
       @shuffle = serializedState.shuffle
-      @playTrackByItem @currentTrack
-    else
-      @isPlaying = false
-      @playList = []
-      @playListCopy = []
-      @currentTrack = null
-      @shuffle = false
+      if @shuffle
+        @shuffle = false # It will be switched back to true in toggleShuffle()
+        @toggleShuffle()
+      if @currentTrack?
+        if @isPlaying
+          @playTrack @currentTrack
+        else
+          @loadTrack @currentTrack
 
   @content: ->
     @div class:'atom-music', =>
@@ -30,7 +37,7 @@ class AtomMusicView extends View
         @div class:'btn-group btn-group-sm pull-right', =>
           @tag 'label', =>
             @tag 'input', style:'display: none;', type:'button', click:'toggleShuffle'
-            @span 'Order', class:'btn shuffle-button icon icon-sync', outlet:'shuffleButton'
+            @span 'Ordered', class:'btn shuffle-button icon icon-sync', outlet:'shuffleButton'
           @tag 'label', =>
             @tag 'input', style:'display: none;', type:'button', click:'showPlayList'
             @span 'Show Playlist', class:'btn icon icon-list-ordered',
@@ -49,23 +56,26 @@ class AtomMusicView extends View
 
   initialize: ->
     @musicFileSelectionInput.on 'change', @filesBrowsed
-    @audio_player.on 'play', ( ) =>
+    @audio_player.on 'play', () =>
+      @isPlaying = true
       @playbackButton.removeClass('icon-playback-play').addClass('icon-playback-pause')
       @element.classList.add('pulse')
       @startTicker()
-    @audio_player.on 'pause', ( ) =>
+    @audio_player.on 'pause', () =>
+      @isPlaying = false
       @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
       @element.classList.remove('pulse')
       @stopTicker()
     @audio_player.on 'ended', @songEnded
-    @container.on 'click', ( evt ) =>
+    @container.on 'click', (evt) =>
       if 35 <= evt.offsetY <= 40 and @currentTrack?
-        @ticker.context.style.width = evt.offsetX+"px"
+        @setTickerWidth evt.offsetX
         totalTime = @audio_player[0].duration
         factor = totalTime / @container.width()
         @audio_player[0].currentTime = evt.offsetX * factor
 
   destroy: ->
+    @playlistView?.destroy()
     @element.remove()
 
   show: ->
@@ -96,12 +106,15 @@ class AtomMusicView extends View
       timeSpent = @audio_player[0].currentTime
       totalTime = @audio_player[0].duration
       percentCompleted = timeSpent / totalTime
-      @ticker.context.style.width = percentCompleted * @container.width() + 'px'
+      @setTickerWidth percentCompleted * @container.width()
 
-  songEnded: ( e ) =>
+  setTickerWidth: (width) ->
+    @ticker.context.style.width = "#{width}px"
+
+  songEnded: (e) =>
     @nextTrack()
 
-  skip: ( seconds )->
+  skip: (seconds)->
     delta = @audio_player[0].currentTime + seconds
     if (delta < 0)
       @audio_player[0].currentTime = 0
@@ -116,53 +129,42 @@ class AtomMusicView extends View
   back15: ->
     @skip(-15)
 
+  getTrackIndex: (track) ->
+    @playList.findIndex (t) -> track.name == t.name
+
   nextTrack: ->
-    player = @audio_player[0]
     if @currentTrack?
-      currentTrackIndex = @playList.indexOf @currentTrack
-      if currentTrackIndex == (@playList.length - 1)
+      currentTrackIndex = @getTrackIndex @currentTrack
+      if currentTrackIndex == -1 or currentTrackIndex == (@playList.length - 1)
         @shuffleList() if @shuffle
         currentTrackIndex = 0
       else
         currentTrackIndex += 1
-      @playTrack currentTrackIndex
-    # player.pause()
+      @playTrack @playList[currentTrackIndex]
 
   prevTrack: ->
-    player = @audio_player[0]
     if @currentTrack?
-      currentTrackIndex = @playList.indexOf @currentTrack
-      if currentTrackIndex == 0
-        currentTrackIndex = 0
+      currentTrackIndex = @getTrackIndex @currentTrack
+      if currentTrackIndex == -1 or currentTrackIndex == 0
+        currentTrackIndex = @playList.length - 1
       else
         currentTrackIndex -= 1
-      @playTrack currentTrackIndex
+      @playTrack @playList[currentTrackIndex]
 
-  playTrackByItem: (item) ->
-    @shuffleList() if @shuffle
-    @playTrack @playList.indexOf(item)
-
-  playTrack: ( trackNum ) ->
-    track = @playList[trackNum]
-    player = @audio_player[0]
+  loadTrack: (track) ->
     if track?
       @currentTrack = track
       @nowPlayingTitle.html (track.name)
-      player.pause()
-      player.src = track.path
-      player.load()
-      player.play()
+      @audio_player[0].pause()
+      @audio_player[0].src = track.path
+      @audio_player[0].load()
 
-  stopTrack: ( trackNum ) ->
-    track = @playList[trackNum]
-    player = @audio_player[0]
+  playTrack: (track) ->
     if track?
-      @togglePlayback() if not player.paused
-      @currentTrack = null
-      @nowPlayingTitle.html ('Nothing to play')
-      player.src = null
+      @loadTrack(track)
+      @togglePlayback()
 
-  filesBrowsed: ( e ) =>
+  filesBrowsed: (e) =>
     files = e.target.files
     if files? and files.length > 0
       @playListHash = {}
@@ -173,19 +175,18 @@ class AtomMusicView extends View
           @playList.unshift { name:f.name, path:f.path }
       @playListCopy = @playList[...]
 
-      @playTrack 0
+      @shuffleList() if @shuffle
+      @playTrack @playList[0]
 
   togglePlayback: ->
-    player = @audio_player[0]
     if @currentTrack?
-      if player.paused or player.currentTime == 0
-        player.play()
-        @playbackButton.removeClass('icon-playback-play').addClass('icon-playback-pause')
+      if @audio_player[0].paused or @audio_player[0].currentTime == 0
+        @audio_player[0].play()
       else
-        player.pause()
-        @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
+        @audio_player[0].pause()
 
   shuffleList: ->
+    return unless @playList.length > 1
     for i in [@playList.length..1]
       j = Math.floor Math.random() * i
       [@playList[i - 1], @playList[j]] = [@playList[j], @playList[i - 1]]
@@ -193,19 +194,27 @@ class AtomMusicView extends View
   toggleShuffle: ->
     @shuffle = !@shuffle
     if @shuffle
-      @shuffleButton.text('Shuffle')
+      @shuffleButton.text('Shuffled')
       @shuffleList()
     else
-      @shuffleButton.text('Order')
+      @shuffleButton.text('Ordered')
       @playList = @playListCopy[...]
 
   showPlayList: ->
-    new playListView @, @playListCopy
+    @playlistView = new playListView @, @playList[...]
 
   clearPlayList: ->
-    @stopTrack 0
+    @audio_player[0].pause() unless @audio_player[0].paused
+    @audio_player[0].src = ""
+    @stopTicker()
+    @setTickerWidth 0
+    @isPlaying = false
+    @currentTrack = null
     @playList = []
     @playListCopy = []
+    @nowPlayingTitle.html ('Nothing to play')
+    @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
+    @element.classList.remove('pulse')
 
   hide: ->
     @panel?.hide()
