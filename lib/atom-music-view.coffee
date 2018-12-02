@@ -12,8 +12,8 @@ class AtomMusicView extends View
     super()
     if serializedState?
       @isPlaying = serializedState.isPlaying
-      @playList = serializedState.playList
-      @playListCopy = serializedState.playListCopy
+      @playList = serializedState.playList or []
+      @playListCopy = serializedState.playListCopy or []
       @currentTrack = serializedState.currentTrack
       @shuffle = serializedState.shuffle
       if @shuffle
