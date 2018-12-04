@@ -5,52 +5,68 @@
 @import "ui-variables";
 
 .atom-music {
+	display: flex;
+	flex-direction: column;
 
-  .audio-controls-container {
-    width: 100%;
-    padding: 7px 10px;
-    border-bottom: 2px solid #02E9FF;
-    position: relative;
+	.audio-controls-container {
+		flex: none;
+		padding: @component-padding;
+		border-bottom: 2px solid #02E9FF;
+		position: relative;
 
-    &.pulse {
-      animation: pulse 2s cubic-bezier(1, 0.75, 1, 0.75) infinite alternate;
-    }
+		&.pulse {
+			animation: pulse 2s cubic-bezier(1, 0.75, 1, 0.75) infinite alternate;
+		}
 
-    .playing-now-container {
-      padding: 5px 20px;
-    }
+		.playing-now-container {
+			padding: @component-padding / 2 @component-padding * 2;
 
-  }
+			.ticker {
+				width: 0;
+				height: 2px;
+				background-color: black;
+				position: absolute;
+				bottom: -2px;
+				left: 0;
+			}
+		}
+	}
 
-  .atom-music-list-container {
-    width: 100%;
-    height: 100%;
-  }
+	.atom-music-list-container {
+		flex: auto;
+		margin-top: @component-padding;
+		overflow-y: auto;
+		border-top: 1px solid @overlay-border-color;
+
+		li {
+			list-style: none;
+			padding: @component-padding / 2;
+			line-height: @component-line-height;
+			border-bottom: 1px solid @overlay-border-color;
+			cursor: pointer;
+
+			&.selected {
+				background-color: @background-color-selected;
+				color: @text-color-selected;
+
+				&::before {
+					display: none;
+				}
+			}
+
+			&:hover {
+				background-color: @background-color-highlight;
+				color: @text-color-highlight;
+			}
+		}
+	}
 }
-
-#atom_music_player {
-  width: 100%;
-
-  .audio-player {
-    display: none;
-  }
-}
-
-#ticker {
-  width: 0px;
-  height: 2px;
-  background-color: black;
-  position: absolute;
-  bottom: -2px;
-  left: 0px;
-}
-
 @keyframes pulse {
-  from {
-    border-bottom-color: #02E9FF;
-  }
+	from {
+		border-bottom-color: #02E9FF;
+	}
 
-  to {
-    border-bottom-color: #000;
-  }
+	to {
+		border-bottom-color: #000;
+	}
 }

@@ -1,4 +1,4 @@
-{View} = require 'atom-space-pen-views'
+{$, View} = require 'atom-space-pen-views'
 playListView = require './atom-music-playlist-view'
 module.exports =
 class AtomMusicView extends View
@@ -16,6 +16,7 @@ class AtomMusicView extends View
       @playListCopy = serializedState.playListCopy
       @currentTrack = serializedState.currentTrack
       @shuffle = serializedState.shuffle
+      @updateMusicList()
       if @shuffle
         @shuffle = false # It will be switched back to true in toggleShuffle()
         @toggleShuffle()
@@ -43,24 +44,18 @@ class AtomMusicView extends View
           @button class:'btn icon icon-playback-fast-forward', click:'nextTrack'
           @button class:'btn icon icon-jump-right', click:'forward15'
         @div class:'btn-group btn-group-sm pull-right', =>
-          @tag 'label', =>
-            @tag 'input', style:'display: none;', type:'button', click:'toggleShuffle'
-            @span 'Ordered', class:'btn shuffle-button icon icon-sync', outlet:'shuffleButton'
-          @tag 'label', =>
-            @tag 'input', style:'display: none;', type:'button', click:'showPlayList'
-            @span 'Show Playlist', class:'btn icon icon-list-ordered',
-          @tag 'label', =>
-            @tag 'input', style:'display: none;', type:'button', click:'clearPlayList'
-            @span 'Clear Playlist', class:'btn icon icon-trashcan',
-          @tag 'label', =>
-            @tag 'input', style:'display: none;', type:'file', multiple:true, accept:'audio/*', outlet:'musicFileSelectionInput'
-            @span 'Open Music Files', class:'btn icon icon-file-directory',
+          @button 'Ordered', class:'btn shuffle-button icon icon-sync', click:'toggleShuffle', outlet:'shuffleButton'
+          @button 'Search Playlist', class:'btn icon icon-list-ordered', click:'showPlayList'
+          @button 'Clear Playlist', class:'btn icon icon-trashcan', click:'clearPlayList'
+          @label 'Open Music Files', class:'btn icon icon-file-directory', =>
+            @input style:'display: none;', type:'file', multiple:true, accept:'audio/*', outlet:'musicFileSelectionInput'
         @div class:'inline-block playing-now-container', =>
           @span 'Now Playing : ', class:'highlight'
           @span 'Nothing to play', class:'highlight', outlet:'nowPlayingTitle'
-          @div id:'ticker', outlet:'ticker'
-      @div class:'atom-music-list-container', outlet:'musicList'
-      @tag 'audio', class:'audio-player', outlet:'audio_player'
+          @div class:'ticker', outlet:'ticker'
+      @div class:'atom-music-list-container', =>
+        @ul class:'list-group', outlet:'musicList'
+      @audio class:'audio-player', outlet:'audio_player'
 
   initialize: ->
     @musicFileSelectionInput.on 'change', @filesBrowsed
@@ -152,6 +147,7 @@ class AtomMusicView extends View
   loadTrack: (track) ->
     if track?
       @currentTrack = track
+      @updateMusicList()
       @nowPlayingTitle.html (track.name)
       @audio_player[0].pause()
       @audio_player[0].src = track.path
@@ -166,15 +162,24 @@ class AtomMusicView extends View
     files = e.target.files
     if files? and files.length > 0
       @playListHash = {}
-      for f in @playList
+      for f in @playListCopy
         @playListHash[f.name] = 1
       for f in files
         if !@playListHash[f.name]?
-          @playList.unshift { name:f.name, path:f.path }
-      @playListCopy = @playList[...]
+          @playListCopy.unshift { name:f.name, path:f.path }
+      @playList = @playListCopy[...]
 
+      @updateMusicList()
       @shuffleList() if @shuffle
-      @playTrack @playList[0]
+      @playTrack @playList[@getTrackIndex name: files[0].name]
+
+  updateMusicList: ->
+    @musicList.html ""
+    for track in @playListCopy
+      @musicList.append @createMusicListItem track
+
+  createMusicListItem: (track) ->
+    $("<li>#{track.name}</li>").toggleClass("selected", @currentTrack? and track.name is @currentTrack.name).click => @playTrack track
 
   togglePlayback: ->
     if @currentTrack?
@@ -199,7 +204,7 @@ class AtomMusicView extends View
       @playList = @playListCopy[...]
 
   showPlayList: ->
-    @playlistView = new playListView @, @playList[...]
+    @playlistView = new playListView @, @playListCopy[...]
 
   clearPlayList: ->
     @audio_player[0].pause() unless @audio_player[0].paused
@@ -210,6 +215,7 @@ class AtomMusicView extends View
     @currentTrack = null
     @playList = []
     @playListCopy = []
+    @updateMusicList()
     @nowPlayingTitle.html ('Nothing to play')
     @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
     @container.removeClass('pulse')
