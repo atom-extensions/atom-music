@@ -8,6 +8,8 @@ module.exports = AtomMusic =
 
   activate: (state) ->
     @atomMusicView = new AtomMusicView(state.atomMusicViewState)
+    @subscriptions.add atom.workspace.addOpener (uri) =>
+      return @atomMusicView if uri == @atomMusicView.getURI()
 
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-music:toggle': => @atomMusicView.toggle()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-music:play-pause': => @atomMusicView.togglePlayback()
@@ -22,5 +24,9 @@ module.exports = AtomMusic =
     @atomMusicView?.destroy()
     @subscriptions?.dispose()
 
+  deserializeAtomMusicView: (state) ->
+    new AtomMusicView(state.atomMusicViewState)
+
   serialize: ->
+    deserializer: 'atom-music/AtomMusicView'
     atomMusicViewState: @atomMusicView.serialize()

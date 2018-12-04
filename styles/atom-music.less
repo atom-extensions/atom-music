@@ -5,17 +5,16 @@
 @import "ui-variables";
 
 .atom-music {
-  height: auto;
-  border: 1px solid #02E9FF;
-
-  &.pulse {
-    animation: pulse 2s linear infinite alternate;
-  }
 
   .audio-controls-container {
     width: 100%;
     padding: 7px 10px;
-    border-bottom: 1px solid #000;
+    border-bottom: 2px solid #02E9FF;
+    position: relative;
+
+    &.pulse {
+      animation: pulse 2s cubic-bezier(1, 0.75, 1, 0.75) infinite alternate;
+    }
 
     .playing-now-container {
       padding: 5px 20px;
@@ -42,16 +41,16 @@
   height: 2px;
   background-color: black;
   position: absolute;
-  top: 98%;
+  bottom: -2px;
   left: 0px;
 }
 
 @keyframes pulse {
   from {
-    border-color: #02E9FF;
+    border-bottom-color: #02E9FF;
   }
 
   to {
-    border-color: #000;
+    border-bottom-color: #000;
   }
 }

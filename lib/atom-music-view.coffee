@@ -25,6 +25,14 @@ class AtomMusicView extends View
         else
           @loadTrack @currentTrack
 
+  getTitle: -> 'Music'
+
+  getURI: -> 'atom://atom-music'
+
+  getDefaultLocation: -> 'bottom'
+
+  getAllowedLocations: -> ['bottom']
+
   @content: ->
     @div class:'atom-music', =>
       @div class:'audio-controls-container', outlet:'container', =>
@@ -50,21 +58,21 @@ class AtomMusicView extends View
         @div class:'inline-block playing-now-container', =>
           @span 'Now Playing : ', class:'highlight'
           @span 'Nothing to play', class:'highlight', outlet:'nowPlayingTitle'
-          @div id:'ticker',outlet:'ticker'
-      @div class:'atom-music-list-container'
-      @tag 'audio', class:'audio-player', outlet:'audio_player', ->
+          @div id:'ticker', outlet:'ticker'
+      @div class:'atom-music-list-container', outlet:'musicList'
+      @tag 'audio', class:'audio-player', outlet:'audio_player'
 
   initialize: ->
     @musicFileSelectionInput.on 'change', @filesBrowsed
     @audio_player.on 'play', () =>
       @isPlaying = true
       @playbackButton.removeClass('icon-playback-play').addClass('icon-playback-pause')
-      @element.classList.add('pulse')
+      @container.addClass('pulse')
       @startTicker()
     @audio_player.on 'pause', () =>
       @isPlaying = false
       @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
-      @element.classList.remove('pulse')
+      @container.removeClass('pulse')
       @stopTicker()
     @audio_player.on 'ended', @songEnded
     @container.on 'click', (evt) =>
@@ -78,25 +86,15 @@ class AtomMusicView extends View
     @playlistView?.destroy()
     @element.remove()
 
-  show: ->
-    @panel ?= atom.workspace.addBottomPanel item: @
-    @panel.show()
-
-
   toggle:->
-    if @panel?.isVisible()
-      @hide()
-      @stopTicker()
-    else
-      @show()
-      @startTicker()
+    atom.workspace.toggle @getURI()
 
   stopTicker: ->
     clearInterval(@tickerInterval)
 
   startTicker: ->
     @stopTicker()
-    if @currentTrack? and @panel?.isVisible()
+    if @currentTrack?
       @tickerInterval = setInterval () =>
         @moveTicker()
       , 100
@@ -109,7 +107,7 @@ class AtomMusicView extends View
       @setTickerWidth percentCompleted * @container.width()
 
   setTickerWidth: (width) ->
-    @ticker.context.style.width = "#{width}px"
+    @ticker.width(width)
 
   songEnded: (e) =>
     @nextTrack()
@@ -214,10 +212,7 @@ class AtomMusicView extends View
     @playListCopy = []
     @nowPlayingTitle.html ('Nothing to play')
     @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
-    @element.classList.remove('pulse')
-
-  hide: ->
-    @panel?.hide()
+    @container.removeClass('pulse')
 
   serialize: ->
     isPlaying: @isPlaying
