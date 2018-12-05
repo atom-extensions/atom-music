@@ -47,12 +47,13 @@ class AtomMusicView extends View
           @button 'Ordered', class:'btn shuffle-button icon icon-sync', click:'toggleShuffle', outlet:'shuffleButton'
           @button 'Search Playlist', class:'btn icon icon-list-ordered', click:'showPlayList'
           @button 'Clear Playlist', class:'btn icon icon-trashcan', click:'clearPlayList'
-          @label 'Open Music Files', class:'btn icon icon-file-directory', =>
+          @label 'Open Music Files', class:'btn icon icon-file-directory', tabIndex: 0, outlet:'openButton', =>
             @input style:'display: none;', type:'file', multiple:true, accept:'audio/*', outlet:'musicFileSelectionInput'
         @div class:'inline-block playing-now-container', =>
           @span 'Now Playing : ', class:'highlight'
           @span 'Nothing to play', class:'highlight', outlet:'nowPlayingTitle'
-          @div class:'ticker', outlet:'ticker'
+          @div class:'ticker', click:'changeTicker', =>
+            @div outlet:'ticker'
       @div class:'atom-music-list-container', =>
         @ul class:'list-group', outlet:'musicList'
       @audio class:'audio-player', outlet:'audio_player'
@@ -70,12 +71,9 @@ class AtomMusicView extends View
       @container.removeClass('pulse')
       @stopTicker()
     @audio_player.on 'ended', @songEnded
-    @container.on 'click', (evt) =>
-      if 35 <= evt.offsetY <= 40 and @currentTrack?
-        @setTickerWidth evt.offsetX
-        totalTime = @audio_player[0].duration
-        factor = totalTime / @container.width()
-        @audio_player[0].currentTime = evt.offsetX * factor
+    @openButton.keypress (e) =>
+      if e.keyCode is 32
+        @openButton.click()
 
   destroy: ->
     @playlistView?.destroy()
@@ -84,25 +82,28 @@ class AtomMusicView extends View
   toggle:->
     atom.workspace.toggle @getURI()
 
+  changeTicker: (e) ->
+    if @currentTrack?
+      @ticker.width e.offsetX
+      totalTime = @audio_player[0].duration
+      factor = totalTime / @container.width()
+      @audio_player[0].currentTime = e.offsetX * factor
+
   stopTicker: ->
-    clearInterval(@tickerInterval)
+    cancelAnimationFrame(@tickerTimeout)
 
   startTicker: ->
     @stopTicker()
     if @currentTrack?
-      @tickerInterval = setInterval () =>
-        @moveTicker()
-      , 100
+      @moveTicker()
 
   moveTicker: ->
     if @currentTrack?
       timeSpent = @audio_player[0].currentTime
       totalTime = @audio_player[0].duration
       percentCompleted = timeSpent / totalTime
-      @setTickerWidth percentCompleted * @container.width()
-
-  setTickerWidth: (width) ->
-    @ticker.width(width)
+      @ticker.width percentCompleted * @container.width()
+      @tickerTimeout = requestAnimationFrame => @moveTicker()
 
   songEnded: (e) =>
     @nextTrack()
@@ -179,7 +180,13 @@ class AtomMusicView extends View
       @musicList.append @createMusicListItem track
 
   createMusicListItem: (track) ->
-    $("<li>#{track.name}</li>").toggleClass("selected", @currentTrack? and track.name is @currentTrack.name).click => @playTrack track
+    $ "<li tabindex='0' />"
+      .text track.name
+      .toggleClass "selected", @currentTrack? and track.name is @currentTrack.name
+      .click => @playTrack track
+      .keypress (e) ->
+        if e.keyCode is 32
+          $(this).click()
 
   togglePlayback: ->
     if @currentTrack?

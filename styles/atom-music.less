@@ -22,12 +22,18 @@
 			padding: @component-padding / 2 @component-padding * 2;
 
 			.ticker {
-				width: 0;
-				height: 2px;
-				background-color: black;
+				width: 100%;
+				height: @component-padding * 2 + 2;
 				position: absolute;
-				bottom: -2px;
+				bottom: -@component-padding - 2;
 				left: 0;
+
+				div {
+					width: 0;
+					height: 2px;
+					margin-top: @component-padding;
+					background-color: #000;
+				}
 			}
 		}
 	}
@@ -54,6 +60,7 @@
 				}
 			}
 
+			&:focus,
 			&:hover {
 				background-color: @background-color-highlight;
 				color: @text-color-highlight;
