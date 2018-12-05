@@ -73,6 +73,7 @@ class AtomMusicView extends View
     @audio_player.on 'ended', @songEnded
     @openButton.keypress (e) =>
       if e.keyCode is 32
+        e.preventDefault()
         @openButton.click()
 
   destroy: ->
@@ -148,7 +149,7 @@ class AtomMusicView extends View
   loadTrack: (track) ->
     if track?
       @currentTrack = track
-      @updateMusicList()
+      @selectCurrentTrack()
       @nowPlayingTitle.html (track.name)
       @audio_player[0].pause()
       @audio_player[0].src = track.path
@@ -174,6 +175,12 @@ class AtomMusicView extends View
       @shuffleList() if @shuffle
       @playTrack @playList[@getTrackIndex name: files[0].name]
 
+  selectCurrentTrack: ->
+    @musicList.find(".selected").removeClass("selected")
+    if @currentTrack?
+      for li in @musicList.find("li")
+        $(li).addClass("selected") if $(li).data().name is @currentTrack.name
+
   updateMusicList: ->
     @musicList.html ""
     for track in @playListCopy
@@ -181,11 +188,13 @@ class AtomMusicView extends View
 
   createMusicListItem: (track) ->
     $ "<li tabindex='0' />"
+      .data name: track.name
       .text track.name
       .toggleClass "selected", @currentTrack? and track.name is @currentTrack.name
       .click => @playTrack track
       .keypress (e) ->
         if e.keyCode is 32
+          e.preventDefault()
           $(this).click()
 
   togglePlayback: ->
@@ -217,7 +226,7 @@ class AtomMusicView extends View
     @audio_player[0].pause() unless @audio_player[0].paused
     @audio_player[0].src = ""
     @stopTicker()
-    @setTickerWidth 0
+    @ticker.width 0
     @isPlaying = false
     @currentTrack = null
     @playList = []
