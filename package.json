@@ -19,6 +19,9 @@
       "atom-music:previous-track"
     ]
   },
+  "deserializers": {
+    "atom-music/AtomMusicView": "deserializeAtomMusicView"
+  },
   "repository": "https://github.com/sdinesh86/atom-music",
   "license": "MIT",
   "engines": {
