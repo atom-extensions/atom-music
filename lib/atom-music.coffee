@@ -6,6 +6,25 @@ module.exports = AtomMusic =
   modalPanel: null
   subscriptions: new CompositeDisposable
 
+  config:
+    state:
+      title: 'Multi-Window State'
+      type: 'object'
+      collapsed: true
+      order: -1
+      description: 'Changing these values manually may prevent atom-music from working properly.'
+      properties:
+        playing:
+          title: 'Playing'
+          type: 'boolean'
+          order: 1
+          default: false
+        playerWindowId:
+          title: 'Window ID'
+          type: 'integer'
+          order: 2
+          default: 0
+
   activate: (state) ->
     @atomMusicView = new AtomMusicView(state.atomMusicViewState)
     @subscriptions.add atom.workspace.addOpener (uri) =>
@@ -19,6 +38,17 @@ module.exports = AtomMusic =
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-music:backward-15s': => @atomMusicView.back15()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-music:next-track': => @atomMusicView.nextTrack()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-music:previous-track': => @atomMusicView.prevTrack()
+
+    @subscriptions.add atom.config.onDidChange 'atom-music.state.playing', (playing) =>
+      windowId = atom.config.get 'atom-music.state.playerWindowId'
+      console.log "p", windowId, @atomMusicView.windowId, playing.newValue, @atomMusicView.isPlaying
+      if windowId is @atomMusicView.windowId
+        @atomMusicView.togglePlayback() if playing.newValue isnt @atomMusicView.isPlaying
+    @subscriptions.add atom.config.onDidChange 'atom-music.state.playerWindowId', (windowId) =>
+      console.log "w", windowId.newValue, @atomMusicView.windowId, @atomMusicView.isPlaying
+      if windowId.newValue isnt @atomMusicView.windowId
+        @atomMusicView.fromWindowChange = true
+        @atomMusicView.togglePlayback() if @atomMusicView.isPlaying
 
   deactivate: ->
     @atomMusicView?.destroy()

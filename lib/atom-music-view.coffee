@@ -10,6 +10,8 @@ class AtomMusicView extends View
 
   constructor: (serializedState) ->
     super()
+    @windowId = atom.getCurrentWindow().id
+    @fromWindowChange = false
     if serializedState?
       @isPlaying = serializedState.isPlaying
       @playList = serializedState.playList or []
@@ -62,11 +64,17 @@ class AtomMusicView extends View
     @musicFileSelectionInput.on 'change', @filesBrowsed
     @audio_player.on 'play', () =>
       @isPlaying = true
+      atom.config.set 'atom-music.state.playerWindowId', @windowId
+      atom.config.set "atom-music.state.playing", true
       @playbackButton.removeClass('icon-playback-play').addClass('icon-playback-pause')
       @container.addClass('pulse')
       @startTicker()
     @audio_player.on 'pause', () =>
       @isPlaying = false
+      if @fromWindowChange
+        @fromWindowChange = false
+      else
+        atom.config.set "atom-music.state.playing", false
       @playbackButton.removeClass('icon-playback-pause').addClass('icon-playback-play')
       @container.removeClass('pulse')
       @stopTicker()
