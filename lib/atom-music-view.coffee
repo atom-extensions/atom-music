@@ -248,7 +248,7 @@ class AtomMusicView extends View
     @container.removeClass('pulse')
 
   serialize: ->
-    isPlaying: @isPlaying
+    isPlaying: false # @isPlaying
     playList: @playList
     playListCopy: @playListCopy
     currentTrack: @currentTrack
