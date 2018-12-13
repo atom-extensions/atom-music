@@ -41,7 +41,7 @@ module.exports = AtomMusic =
 
     @subscriptions.add atom.config.onDidChange 'atom-music.state.playing', (playing) =>
       windowId = atom.config.get 'atom-music.state.playerWindowId'
-      if windowId is @atomMusicView.windowId
+      if windowId is @atomMusicView.windowId or windowId is 0
         @atomMusicView.togglePlayback() if playing.newValue isnt @atomMusicView.isPlaying
     @subscriptions.add atom.config.onDidChange 'atom-music.state.playerWindowId', (windowId) =>
       if windowId.newValue isnt @atomMusicView.windowId
@@ -49,6 +49,10 @@ module.exports = AtomMusic =
         @atomMusicView.togglePlayback() if @atomMusicView.isPlaying
 
   deactivate: ->
+    windowId = atom.config.get 'atom-music.state.playerWindowId'
+    if windowId is @atomMusicView.windowId
+      atom.config.set 'atom-music.state.playerWindowId', 0
+      atom.config.set 'atom-music.state.playing', false
     @atomMusicView?.destroy()
     @subscriptions?.dispose()
 
