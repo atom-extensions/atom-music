@@ -2,16 +2,17 @@
 playListView = require './atom-music-playlist-view'
 module.exports =
 class AtomMusicView extends View
-  isPlaying = false
-  playList = []
-  playListCopy = []
-  currentTrack = null
-  shuffle = false
 
   constructor: (serializedState) ->
     super()
-    @windowId = atom.getCurrentWindow().id
+    @isPlaying = false
+    @playList = []
+    @playListCopy = []
+    @currentTrack = null
+    @shuffle = false
     @fromWindowChange = false
+    @windowId = atom.getCurrentWindow().id
+
     if serializedState?
       @isPlaying = serializedState.isPlaying
       @playList = serializedState.playList or []
