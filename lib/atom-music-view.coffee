@@ -164,11 +164,14 @@ class AtomMusicView extends View
     files = e.target.files
     if files? and files.length > 0
       @playListHash = {}
-      for f in @playListCopy
+      for f in @playListCopy or []
         @playListHash[f.name] = 1
       for f in files
         if !@playListHash[f.name]?
-          @playListCopy.unshift { name:f.name, path:f.path }
+          try
+            @playListCopy.unshift { name:f.name, path:f.path }
+          catch e
+            @playListCopy = [ name:f.name, path:f.path ]
       @playList = @playListCopy[...]
 
       @updateMusicList()
