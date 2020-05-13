@@ -38,11 +38,11 @@ class AtomMusicView extends View
     @div class:'atom-music', =>
       @div class:'audio-controls-container', outlet:'container', =>
         @div class:'btn-group btn-group-sm', =>
-          @button class:'btn icon icon-jump-left', click:'back15'
-          @button class:'btn icon icon-playback-rewind', click:'prevTrack'
+          @button class:'btn icon icon-jump-left', click:'prevTrack'
+          @button class:'btn icon icon-playback-rewind', click:'back15'
           @button class:'btn icon playback-button icon-playback-play', click:'togglePlayback', outlet:'playbackButton'
-          @button class:'btn icon icon-playback-fast-forward', click:'nextTrack'
-          @button class:'btn icon icon-jump-right', click:'forward15'
+          @button class:'btn icon icon-playback-fast-forward', click:'forward15'
+          @button class:'btn icon icon-jump-right', click:'nextTrack'
         @div class:'btn-group btn-group-sm pull-right', =>
           @button 'Ordered', class:'btn shuffle-button icon icon-sync', click:'toggleShuffle', outlet:'shuffleButton'
           @button 'Search Playlist', class:'btn icon icon-list-ordered', click:'showPlayList'
