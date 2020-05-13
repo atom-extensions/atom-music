@@ -1,7 +1,7 @@
 {
   "name": "atom-music",
   "main": "./lib/atom-music",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "A very simple Music player for atom, listen to your favorite music while workin in atom.",
   "keywords": [
     "music",
