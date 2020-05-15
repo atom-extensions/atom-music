@@ -1,3 +1,7 @@
+## 0.10.3 - CI implemented
+* GitHub CI workflow implemented
+* Dependency badge added
+
 ## 0.10.2 - Tests fixed
 * Spec tests fixed.
 
