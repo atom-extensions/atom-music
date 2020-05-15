@@ -27,7 +27,17 @@
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
   },
+  "scripts": {
+    "test": "atom --test spec",
+    "lint": "coffeelint ."
+  },
   "dependencies": {
     "atom-space-pen-views": "^2.2.0"
+  },
+  "devDependencies": {
+    "@semantic-release/apm-config": "^8.0.0",
+    "@coffeelint/cli": "^3.2.4",
+    "semantic-release": "^17.0.7",
+    "temp": "^0.9.1"
   }
 }
