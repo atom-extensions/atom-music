@@ -11,9 +11,10 @@ describe "AtomMusic", ->
   beforeEach ->
     workspaceElement = atom.views.getView(atom.workspace)
     activationPromise = atom.packages.activatePackage('atom-music')
+    return
 
   describe "when the atom-music:toggle event is triggered", ->
-    it "hides and shows the modal panel", ->
+    it "hides and shows the pane", ->
       # Before the activation event the view is not on the DOM, and no panel
       # has been created
       expect(workspaceElement.querySelector('.atom-music')).not.toExist()
@@ -31,32 +32,8 @@ describe "AtomMusic", ->
         atomMusicElement = workspaceElement.querySelector('.atom-music')
         expect(atomMusicElement).toExist()
 
-        atomMusicPanel = atom.workspace.panelForItem(AtomMusic.atomMusicView)
-        expect(atomMusicPanel.isVisible()).toBe true
+        bottomDock = atom.workspace.getBottomDock()
+        expect(bottomDock.getActivePaneItem()).toBe AtomMusic.atomMusicView
+        expect(bottomDock.isVisible()).toBe true
         atom.commands.dispatch workspaceElement, 'atom-music:toggle'
-        expect(atomMusicPanel.isVisible()).toBe false
-
-    it "hides and shows the view", ->
-      # This test shows you an integration test testing at the view level.
-
-      # Attaching the workspaceElement to the DOM is required to allow the
-      # `toBeVisible()` matchers to work. Anything testing visibility or focus
-      # requires that the workspaceElement is on the DOM. Tests that attach the
-      # workspaceElement to the DOM are generally slower than those off DOM.
-      jasmine.attachToDOM(workspaceElement)
-
-      expect(workspaceElement.querySelector('.atom-music')).not.toExist()
-
-      # This is an activation event, triggering it causes the package to be
-      # activated.
-      atom.commands.dispatch workspaceElement, 'atom-music:toggle'
-
-      waitsForPromise ->
-        activationPromise
-
-      runs ->
-        # Now we can test for view visibility
-        atomMusicElement = workspaceElement.querySelector('.atom-music')
-        expect(atomMusicElement).toBeVisible()
-        atom.commands.dispatch workspaceElement, 'atom-music:toggle'
-        expect(atomMusicElement).not.toBeVisible()
+        expect(bottomDock.isVisible()).toBe false
