@@ -11,7 +11,7 @@ class AtomMusicView extends View
     @currentTrack = null
     @shuffle = false
     @fromWindowChange = false
-    @windowId = atom.getCurrentWindow().id
+    @windowId = process.pid
 
     if serializedState?
       @isPlaying = serializedState.isPlaying
