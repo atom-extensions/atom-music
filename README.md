@@ -1,3 +1,6 @@
+[![Build Status](https://github.com/sdinesh86/atom-music/workflows/Build/badge.svg)](https://github.com/sdinesh86/atom-music/actions)
+
+
 # atom-music package
 
 A very Simple Music player for atom.
