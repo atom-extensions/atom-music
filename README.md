@@ -1,10 +1,20 @@
 # atom-music package
-[![Build Status](https://github.com/sdinesh86/atom-music/workflows/Build/badge.svg)](https://github.com/sdinesh86/atom-music/actions)
-[![Dependency status](https://david-dm.org/sdinesh86/atom-music.svg)](https://david-dm.org/sdinesh86/atom-music)
+[![Build Status](https://github.com/atom-extensions/atom-music/workflows/Build/badge.svg)](https://github.com/atom-extensions/atom-music/actions)
+[![Dependency status](https://david-dm.org/atom-extensions/atom-music.svg)](https://david-dm.org/atom-extensions/atom-music)
 
-A very Simple Music player for atom.
+This is a very simple music player plug-in for [Atom](https://atom.io).
 
-Just press Alt-M to get it up.
-Then load your audio files using Open Music files button on the right hand side AND VOILA there you go playign your favorite music while doing your coding.
+Just press <kbd>Alt-M</kbd> to get it up.
+Then load your audio files by using the `Open Music Files` button on the right hand side AND VOILA there you go playing your favorite music while doing your coding.
 
-Happy Coding
+Happy Coding!
+
+## Troubleshooting
+If the keystroke doesn't work then please use <kbd>Ctrl-.</kbd> to check your keybindings and follow these instructions: https://flight-manual.atom.io/using-atom/sections/basic-customization/#customizing-keybindings
+
+## License
+This project is free software under the terms of the MIT license.  
+For more details please see the LICENSE file or: https://opensource.org/licenses/MIT
+
+## Credits
+ * Git repository: https://github.com/atom-extensions/atom-music.git
