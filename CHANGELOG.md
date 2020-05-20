@@ -1,3 +1,8 @@
+## 0.10.4 - Some minimal updates
+* Automatic releases implemented.
+* Screenshot added.
+* README and LICENSE files updated.
+
 ## 0.10.3 - CI implemented
 * GitHub CI workflow implemented
 * Dependency badge added
