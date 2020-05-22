@@ -1,0 +1,43 @@
+{
+    "features": {
+        "description": "Enable or disable features.",
+        "type": "object",
+        "collapsed": false,
+        "order": 1,
+        "properties": {
+            "logging": {
+                "title": "Enable logging",
+                "type": "boolean",
+                "order": 1,
+                "default": false
+            },
+            "multiWindowSupport": {
+                "title": "Allow player to play simultaneously in different windows (not recommended, takes effect at restart)",
+                "type": "boolean",
+                "order": 2,
+                "default": false
+            }
+        }
+    },
+    "state": {
+        "title": "Internal state",
+        "description": "⚠ Changing these values manually may prevent atom-music from working properly. Only for debugging purposes.",
+        "type": "object",
+        "collapsed": true,
+        "order": -1,
+        "properties": {
+            "playing": {
+                "title": "Currently playing",
+                "type": "boolean",
+                "order": 1,
+                "default": false
+            },
+            "playerWindowId": {
+                "title": "Current window PID",
+                "type": "integer",
+                "order": 2,
+                "default": 0
+            }
+        }
+    }
+}

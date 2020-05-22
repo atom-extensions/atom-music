@@ -66,7 +66,7 @@ class AtomMusicView extends View
     @audio_player.on 'play', () =>
       @isPlaying = true
       atom.config.set 'atom-music.state.playerWindowId', @windowId
-      atom.config.set "atom-music.state.playing", true
+      atom.config.set "atom-music.state.playing", @isPlaying
       @playbackButton.removeClass('icon-playback-play').addClass('icon-playback-pause')
       @container.addClass('pulse')
       @startTicker()
@@ -249,7 +249,7 @@ class AtomMusicView extends View
     @container.removeClass('pulse')
 
   serialize: ->
-    isPlaying: false # @isPlaying
+    isPlaying: false
     playList: @playList
     playListCopy: @playListCopy
     currentTrack: @currentTrack

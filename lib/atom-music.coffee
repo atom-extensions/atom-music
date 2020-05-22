@@ -1,29 +1,12 @@
 AtomMusicView = require './atom-music-view'
 {CompositeDisposable} = require 'atom'
+configSchema = require '../config.json'
 
 module.exports = AtomMusic =
   atomMusicView: null
   modalPanel: null
   subscriptions: new CompositeDisposable
-
-  config:
-    state:
-      title: 'Multi-Window State'
-      type: 'object'
-      collapsed: true
-      order: -1
-      description: 'Changing these values manually may prevent atom-music from working properly.'
-      properties:
-        playing:
-          title: 'Playing'
-          type: 'boolean'
-          order: 1
-          default: false
-        playerWindowId:
-          title: 'Window ID'
-          type: 'integer'
-          order: 2
-          default: 0
+  config: configSchema
 
   activate: (state) ->
     @atomMusicView = new AtomMusicView(state.atomMusicViewState)
@@ -39,14 +22,19 @@ module.exports = AtomMusic =
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-music:next-track': => @atomMusicView.nextTrack()
     @subscriptions.add atom.commands.add 'atom-workspace', 'atom-music:previous-track': => @atomMusicView.prevTrack()
 
-    @subscriptions.add atom.config.onDidChange 'atom-music.state.playing', (playing) =>
-      windowId = atom.config.get 'atom-music.state.playerWindowId'
-      if windowId is @atomMusicView.windowId or windowId is 0
-        @atomMusicView.togglePlayback() if playing.newValue isnt @atomMusicView.isPlaying
-    @subscriptions.add atom.config.onDidChange 'atom-music.state.playerWindowId', (windowId) =>
-      if windowId.newValue isnt @atomMusicView.windowId
-        @atomMusicView.fromWindowChange = true
-        @atomMusicView.togglePlayback() if @atomMusicView.isPlaying
+    if not atom.config.get 'atom-music.features.multiWindowSupport'
+      @subscriptions.add atom.config.onDidChange 'atom-music.state.playing', (playing) =>
+        mainWindowId = atom.config.get 'atom-music.state.playerWindowId'
+        if atom.config.get 'atom-music.features.logging'
+          console.log "Playing state changed", mainWindowId, @atomMusicView.windowId, playing.newValue, @atomMusicView.isPlaying
+        if mainWindowId is @atomMusicView.windowId or mainWindowId is 0
+          @atomMusicView.togglePlayback() if playing.newValue isnt @atomMusicView.isPlaying
+      @subscriptions.add atom.config.onDidChange 'atom-music.state.playerWindowId', (windowId) =>
+        if atom.config.get 'atom-music.features.logging'
+          console.log "Window ID changed", windowId.newValue, @atomMusicView.windowId, @atomMusicView.isPlaying
+        if windowId.newValue isnt @atomMusicView.windowId
+          @atomMusicView.fromWindowChange = true
+          @atomMusicView.togglePlayback() if @atomMusicView.isPlaying
 
   deactivate: ->
     windowId = atom.config.get 'atom-music.state.playerWindowId'
