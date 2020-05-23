@@ -31,14 +31,16 @@
   },
   "scripts": {
     "test": "atom --test spec",
-    "lint": "coffeelint ."
+    "lint": "eslint ."
   },
   "dependencies": {
-    "atom-space-pen-views": "^2.2.0"
+    "atom-select-list": "^0.7.2",
+    "etch": "^0.14.0"
   },
   "devDependencies": {
     "@semantic-release/apm-config": "^8.0.0",
-    "@coffeelint/cli": "^3.2.4",
+    "eslint": "^7.1.0",
+    "eslint-plugin-react": "^7.20.0",
     "semantic-release": "^17.0.7",
     "temp": "^0.9.1"
   }
