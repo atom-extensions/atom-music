@@ -1,7 +1,8 @@
-// const AtomMusicView = require('../lib/atom-music-view');
+const AtomMusicView = require("../lib/atom-music-view");
 
 describe("AtomMusicView", () => {
-	it("has one valid test", () => {
-		expect("life").not.toBe("easy");
+	it("have an audio tag", () => {
+		const view = new AtomMusicView();
+		expect(view.element.querySelector("audio")).not.toBeNull();
 	});
 });
