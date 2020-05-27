@@ -20,13 +20,7 @@ module.exports = {
 		}
 	},
 	"rules": {
-		indent: ["error", "tab"],
-		semi: ["error", "always"],
-		quotes: ["error", "double"],
-		"jsx-quotes": ["error", "prefer-double"],
-
-		"react/jsx-uses-vars": 2,
-		"react/jsx-indent": ["error", "tab"],
+		"react/jsx-uses-vars": "error",
 	},
 	"settings": {
 		"react": {
