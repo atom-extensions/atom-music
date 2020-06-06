@@ -32,4 +32,59 @@ describe("AtomMusic", function() {
 			expect(bottomDock.isVisible()).toBe(false);
 		});
 	});
+
+	describe("when atom-music is activated", () => {
+		beforeEach(async () => {
+			atom.commands.dispatch(workspaceElement, "atom-music:toggle");
+			await activationPromise;
+		});
+
+		it("adds command atom-music:toggle", async () => {
+			spyOn(AtomMusic.atomMusicView, "toggle");
+			atom.commands.dispatch(workspaceElement, "atom-music:toggle");
+			expect(AtomMusic.atomMusicView.toggle).toHaveBeenCalled();
+		});
+
+		it("adds command atom-music:play-pause", async () => {
+			spyOn(AtomMusic.atomMusicView, "togglePlayback");
+			atom.commands.dispatch(workspaceElement, "atom-music:play-pause");
+			expect(AtomMusic.atomMusicView.togglePlayback).toHaveBeenCalled();
+		});
+
+		it("adds command atom-music:toggle-shuffle", async () => {
+			spyOn(AtomMusic.atomMusicView, "toggleShuffle");
+			atom.commands.dispatch(workspaceElement, "atom-music:toggle-shuffle");
+			expect(AtomMusic.atomMusicView.toggleShuffle).toHaveBeenCalled();
+		});
+
+		it("adds command atom-music:show-playlist", async () => {
+			spyOn(AtomMusic.atomMusicView, "searchPlayList");
+			atom.commands.dispatch(workspaceElement, "atom-music:show-playlist");
+			expect(AtomMusic.atomMusicView.searchPlayList).toHaveBeenCalled();
+		});
+
+		it("adds command atom-music:forward-15s", async () => {
+			spyOn(AtomMusic.atomMusicView, "forward15");
+			atom.commands.dispatch(workspaceElement, "atom-music:forward-15s");
+			expect(AtomMusic.atomMusicView.forward15).toHaveBeenCalled();
+		});
+
+		it("adds command atom-music:backward-15s", async () => {
+			spyOn(AtomMusic.atomMusicView, "back15");
+			atom.commands.dispatch(workspaceElement, "atom-music:backward-15s");
+			expect(AtomMusic.atomMusicView.back15).toHaveBeenCalled();
+		});
+
+		it("adds command atom-music:next-track", async () => {
+			spyOn(AtomMusic.atomMusicView, "nextTrack");
+			atom.commands.dispatch(workspaceElement, "atom-music:next-track");
+			expect(AtomMusic.atomMusicView.nextTrack).toHaveBeenCalled();
+		});
+
+		it("adds command atom-music:previous-track", async () => {
+			spyOn(AtomMusic.atomMusicView, "prevTrack");
+			atom.commands.dispatch(workspaceElement, "atom-music:previous-track");
+			expect(AtomMusic.atomMusicView.prevTrack).toHaveBeenCalled();
+		});
+	});
 });
