@@ -63,16 +63,16 @@ describe("AtomMusic", function() {
 			expect(AtomMusic.atomMusicView.searchPlayList).toHaveBeenCalled();
 		});
 
-		it("adds command atom-music:forward-15s", async () => {
-			spyOn(AtomMusic.atomMusicView, "forward15");
-			atom.commands.dispatch(workspaceElement, "atom-music:forward-15s");
-			expect(AtomMusic.atomMusicView.forward15).toHaveBeenCalled();
+		it("adds command atom-music:forward", async () => {
+			spyOn(AtomMusic.atomMusicView, "forward");
+			atom.commands.dispatch(workspaceElement, "atom-music:forward");
+			expect(AtomMusic.atomMusicView.forward).toHaveBeenCalled();
 		});
 
-		it("adds command atom-music:backward-15s", async () => {
-			spyOn(AtomMusic.atomMusicView, "back15");
-			atom.commands.dispatch(workspaceElement, "atom-music:backward-15s");
-			expect(AtomMusic.atomMusicView.back15).toHaveBeenCalled();
+		it("adds command atom-music:rewind", async () => {
+			spyOn(AtomMusic.atomMusicView, "rewind");
+			atom.commands.dispatch(workspaceElement, "atom-music:rewind");
+			expect(AtomMusic.atomMusicView.rewind).toHaveBeenCalled();
 		});
 
 		it("adds command atom-music:next-track", async () => {
