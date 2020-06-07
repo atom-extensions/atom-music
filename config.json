@@ -19,6 +19,20 @@
             }
         }
     },
+    "controls": {
+        "description": "Adjust the behavior of some controls.",
+        "type": "object",
+        "collapsed": false,
+        "order": 2,
+        "properties": {
+            "skip": {
+                "title": "Fast forward and rewind in seconds (0 hides these controls at restart)",
+                "type": "integer",
+                "order": 1,
+                "default": 15
+            }
+        }
+    },
     "state": {
         "title": "Internal state",
         "description": "⚠ Changing these values manually may prevent atom-music from working properly. Only for debugging purposes.",
