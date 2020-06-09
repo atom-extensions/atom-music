@@ -1,3 +1,18 @@
+# Changelog
+
+## 1.0.0 - Huge breaking changes
+* Introduced configurable rewind and forward buttons.
+* Renamed some commands (please check the 'API' section at the README file for further information).
+* Introduced project status badge.
+* Spec tests extended.
+* [DEV] Moved from [CoffeeScript](https://coffeescript.org) to JavaScript.
+* [DEV] Moved from [atom-space-pen-views](https://www.npmjs.com/package/atom-space-pen-views) to [etch](https://github.com/atom/etch).
+* [DEV] Moved from [coffeelint](http://www.coffeelint.org) to [eslint](https://eslint.org).
+* [DEV] Renamed `PlayListView` to `AtomMusicSearchView`.
+* [DEV] Renamed some events.
+
+*Special thanks to [Tony Brix](https://github.com/UziTech) for making this huge update possible!*
+
 ## 0.11.0 - Features and menu changes introduced
 * Multi window support added.
 * Submenu entry moved from 'Packages' to 'View'.
