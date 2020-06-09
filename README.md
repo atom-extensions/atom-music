@@ -1,6 +1,7 @@
 # atom-music package
 [![Build Status](https://github.com/atom-extensions/atom-music/workflows/Build/badge.svg)](https://github.com/atom-extensions/atom-music/actions)
 [![Dependency status](https://david-dm.org/atom-extensions/atom-music.svg)](https://david-dm.org/atom-extensions/atom-music)
+[![Project: Refactoring](https://img.shields.io/badge/Project-Refactoring-blue.svg)](https://github.com/atom-extensions/atom-music/issues)
 
 This is a very simple music player plug-in for [Atom](https://atom.io).
 
@@ -28,6 +29,14 @@ Happy Coding!
 
 ## Troubleshooting
 If the keystrokes doesn't work then please use <kbd>Ctrl-.</kbd> to check your keybindings and follow these instructions: https://flight-manual.atom.io/using-atom/sections/basic-customization/#customizing-keybindings
+
+## Project status meanings
+ * **Refactoring:** Structural and technical changes have currently priority.
+ * **Active:** Default status.
+ * **Fixes only:** The project is maintained at the minimum level to apply at least fixes.
+ * **Not maintained:** The project is not maintained any more (ready to take over).
+
+*Feature requests are welcomed all the time, of course! ;-)*
 
 ## License
 This project is free software under the terms of the MIT license.  
