@@ -14,7 +14,7 @@
       "atom-music:toggle",
       "atom-music:play-pause",
       "atom-music:toggle-shuffle",
-      "atom-music:show-playlist",
+      "atom-music:search-playlist",
       "atom-music:forward",
       "atom-music:rewind",
       "atom-music:next-track",

@@ -57,9 +57,9 @@ describe("AtomMusic", function() {
 			expect(AtomMusic.atomMusicView.toggleShuffle).toHaveBeenCalled();
 		});
 
-		it("adds command atom-music:show-playlist", async () => {
+		it("adds command atom-music:search-playlist", async () => {
 			spyOn(AtomMusic.atomMusicView, "searchPlayList");
-			atom.commands.dispatch(workspaceElement, "atom-music:show-playlist");
+			atom.commands.dispatch(workspaceElement, "atom-music:search-playlist");
 			expect(AtomMusic.atomMusicView.searchPlayList).toHaveBeenCalled();
 		});
 
