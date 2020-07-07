@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.1 - Security vulnerability fixed
+* [npm](https://www.npmjs.com) updated from 6.14.5 to 6.14.6.
+
 ## 1.0.0 - Huge breaking changes
 * Introduced configurable rewind and forward buttons.
 * Renamed some commands (please check the 'API' section at the README file for further information).
