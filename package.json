@@ -1,7 +1,7 @@
 {
   "name": "atom-music",
   "main": "./lib/atom-music",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A very simple music player for listening to your favorite music while working in Atom.",
   "keywords": [
     "music",
@@ -42,6 +42,7 @@
     "eslint": "^7.1.0",
     "eslint-plugin-react": "^7.20.0",
     "semantic-release": "^17.0.7",
+    "lodash": "^4.17.19",
     "temp": "^0.9.1"
   }
 }
