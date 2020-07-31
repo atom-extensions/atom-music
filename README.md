@@ -5,7 +5,7 @@
 
 This is a very simple music player plug-in for [Atom](https://atom.io).
 
-_![Screenshot library tab](Screenshot.png)_
+_![Screenshot](Screenshot.png)_
 
 Just press <kbd>Alt-M</kbd> to get it up.
 Then load your audio files by using the `Open Music Files` button on the right hand side AND VOILA there you go playing your favorite music while doing your coding.
