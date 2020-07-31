@@ -34,6 +34,7 @@ If the keystrokes doesn't work then please use <kbd>Ctrl-.</kbd> to check your k
  * **Refactoring:** Structural and technical changes have currently priority.
  * **Active:** Default status.
  * **Fixes only:** The project is maintained at the minimum level to apply at least fixes.
+ * **Takeover:** The project is currently being taked over by another team and will possibly move.
  * **Not maintained:** The project is not maintained any more (ready to take over).
 
 *Feature requests are welcomed all the time, of course! ;-)*
