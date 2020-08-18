@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.0 - Session restoring fixed
+* Serialization fixed (not backward compatible)
+* README file fixed and updated
+
 ## 1.0.2 - Security vulnerability fixed
 * Development dependency [lodash](https://www.npmjs.com/package/lodash) updated.
 
