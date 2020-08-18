@@ -1,5 +1,8 @@
 # Changelog
 
+## 2.0.1 - Security vulnerability fixed
+* [DEV] [dot-prop](https://www.npmjs.com/package/dot-prop) updated from `3.0.0` to `4.2.1`.
+
 ## 2.0.0 - Session restoring fixed
 * Serialization fixed (not backward compatible)
 * README file fixed and updated
@@ -8,7 +11,7 @@
 * Development dependency [lodash](https://www.npmjs.com/package/lodash) updated.
 
 ## 1.0.1 - Security vulnerability fixed
-* [npm](https://www.npmjs.com) updated from 6.14.5 to 6.14.6.
+* [npm](https://www.npmjs.com) updated from `6.14.5` to `6.14.6`.
 
 ## 1.0.0 - Huge breaking changes
 * Introduced configurable rewind and forward buttons.
