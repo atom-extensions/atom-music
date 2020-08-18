@@ -12,23 +12,27 @@ Then load your audio files by using the `Open Music Files` button on the right h
 
 Happy Coding!
 
-## API
- Command                        | Function                                                             | Default keystroke
-:------------------------------:|----------------------------------------------------------------------|:-----------------:
- `atom-music:toggle`            | Toggles the whole music player.                                      | <kbd>Alt-M</kbd>  
- `atom-music:play-pause`        | Toggles between play and pause for the current track.                |
- `atom-music:toggle-shuffle`    | Toggles between shuffled and ordered playlist.                       |
- `atom-music:search-playlist`   | Playlist search popups up.                                           |
- ~~`atom-music:show-playlist`~~ | Same as above but **deprecated and removed.** since version `1.x.x`. |
- `atom-music:forward`           | Fast forward (*by default 15 seconds each time*).                    |
- ~~`atom-music:forward-15s`~~   | Same as above but **deprecated and removed.** since version `1.x.x`. |
- `atom-music:rewind`            | Rewind (*by default 15 seconds each time*).                          |
- ~~`atom-music:backward-15s`~~  | Same as above but **deprecated and removed.** since version `1.x.x`. |
- `atom-music:next-track`        | Skips to the next track.                                             |
- `atom-music:previous-track`    | Skips back to the previous track.                                    |
+## Known issues
+ * The playlist get lost after the update from version `1.0.2` to `2.0.0`.
 
 ## Troubleshooting
-If the keystrokes doesn't work then please use <kbd>Ctrl-.</kbd> to check your keybindings and follow these instructions: https://flight-manual.atom.io/using-atom/sections/basic-customization/#customizing-keybindings
+ * If the keystrokes doesn't work then please use <kbd>Ctrl-.</kbd> to check your keybindings and follow these instructions: https://flight-manual.atom.io/using-atom/sections/basic-customization/#customizing-keybindings
+ * If Atom hangs after an update of this package, please just wait a moment and then restart Atom.
+
+## API
+ Command                        | Function                                                                 | Default keystroke
+:------------------------------:|--------------------------------------------------------------------------|:-----------------:
+ `atom-music:toggle`            | Toggles the whole music player.                                          | <kbd>Alt-M</kbd>  
+ `atom-music:play-pause`        | Toggles between play and pause for the current track.                    |
+ `atom-music:toggle-shuffle`    | Toggles between shuffled and ordered playlist.                           |
+ `atom-music:search-playlist`   | Playlist search popups up *(since version `1.x.x`)*.                     |
+ ~~`atom-music:show-playlist`~~ | Same as above but **deprecated and removed since version `1.x.x`**.      |
+ `atom-music:forward`           | Fast forward (*by default 15 seconds each time, since version `1.x.x`*). |
+ ~~`atom-music:forward-15s`~~   | Same as above but **deprecated and removed since version `1.x.x`**.      |
+ `atom-music:rewind`            | Fast rewind (*by default 15 seconds each time, since version `1.x.x`*).  |
+ ~~`atom-music:backward-15s`~~  | Same as above but **deprecated and removed since version `1.x.x`**.      |
+ `atom-music:next-track`        | Skips to the next track.                                                 |
+ `atom-music:previous-track`    | Skips back to the previous track.                                        |
 
 ## Project status meanings
  * **Refactoring:** Structural and technical changes have currently priority.
