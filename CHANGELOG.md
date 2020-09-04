@@ -3,6 +3,7 @@
 ## 2.0.2 - Minimal cleanup
 * Settings description fixed
 * [DEV] Some code unified
+* [DEV] [eslint](https://eslint.org) configuration fixed
 
 ## 2.0.1 - Security vulnerability fixed
 * [DEV] [dot-prop](https://www.npmjs.com/package/dot-prop) updated from `3.0.0` to `4.2.1`.
