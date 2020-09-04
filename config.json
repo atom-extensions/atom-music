@@ -12,7 +12,7 @@
                 "default": false
             },
             "multiWindowSupport": {
-                "title": "Allow player to play simultaneously in different windows (not recommended, takes effect at restart)",
+                "title": "Allow player to play simultaneously in different windows (not recommended)",
                 "type": "boolean",
                 "order": 2,
                 "default": false
@@ -26,7 +26,7 @@
         "order": 2,
         "properties": {
             "skip": {
-                "title": "Fast forward and rewind in seconds (0 hides these controls at restart)",
+                "title": "Fast forward and rewind in seconds (0 hides these controls)",
                 "type": "integer",
                 "order": 1,
                 "default": 15
@@ -38,7 +38,7 @@
         "description": "⚠ Changing these values manually may prevent atom-music from working properly. Only for debugging purposes.",
         "type": "object",
         "collapsed": true,
-        "order": -1,
+        "order": 3,
         "properties": {
             "playing": {
                 "title": "Currently playing",
