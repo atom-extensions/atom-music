@@ -1,5 +1,7 @@
 # Changelog
 
+## 2.0.3 - Search window fixed
+
 ## 2.0.2 - Minimal cleanup
 * Settings description fixed
 * [DEV] Some code unified
