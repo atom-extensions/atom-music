@@ -42,7 +42,7 @@
     "eslint": "^7.1.0",
     "eslint-plugin-react": "^7.20.0",
     "semantic-release": "^17.2.3",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "dot-prop": "^4.2.1",
     "temp": "^0.9.1"
   }
